@@ -1,11 +1,9 @@
-<<<<<<< HEAD
-# zz
-=======
 # travel_page
 
 ## Project setup
 ```
 yarn install
+npm install -g yarn
 ```
 
 ### Compiles and hot-reloads for development
@@ -25,4 +23,3 @@ yarn lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
->>>>>>> 31c6005 (init)
