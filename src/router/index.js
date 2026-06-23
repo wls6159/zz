@@ -1,25 +1,71 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    redirect: '/home',
+    component: () => import('@/views/layout/indexPage.vue'),
+    children: [
+      {
+        path: 'home',
+        component: () => import('@/views/HomePage.vue')
+      },
+      {
+        path: '/destinations',
+        component: () => import('@/views/DestinationsPage.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: '/itineraries',
+        component: () => import('@/views/ItinerariesPage.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: '/guides/:sceneryId?',
+        component: () => import('@/views/GuidesPage.vue'),
+        meta: {
+          auth: true
+        }
+      },
+      {
+        path: '/community',
+        component: () => import('@/views/CommunityPage.vue'),
+        meta: {
+          auth: true
+        }
+      }
+    ]
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    path: '/login',
+    component: () => import('@/views/auth/LoginPage.vue')
+  },
+  {
+    path: '/register',
+    component: () => import('@/views/auth/RegisterPage.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.auth) {
+    const token = localStorage.getItem('token')
+    if (!token) {
+      next('/login')
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
